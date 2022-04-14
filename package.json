@@ -10,8 +10,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@rneui/base": "^4.0.0-rc.1",
+    "@rneui/themed": "^4.0.0-rc.1",
     "react": "17.0.2",
-    "react-native": "0.68.0"
+    "react-native": "0.68.0",
+    "react-native-md-textinput": "^2.0.4",
+    "reinput": "^3.7.2"
   },
   "devDependencies": {
     "@babel/core": "7.17.9",
