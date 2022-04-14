@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react
 import { Input } from '@rneui/base';
 
 export default function Login(){
-    const logo = require("/Users/oscar/hackUST-ui/assets/blue-circle-handbag-icon.png");
+    const logo = require("./../assets/blue-circle-handbag-icon.png");
     return(
         <View style={{}}>
             <View style={{alignItems: 'center',}}>
