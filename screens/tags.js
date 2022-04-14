@@ -5,7 +5,7 @@ import { BLACK, GRAY } from 'reinput/src/services/constants';
 import { withTheme } from '@rneui/themed';
 import { styles } from 'reinput/src/Input';
 
-const url = "http://none:1337/api/tags";
+const url = "http://192.168.86.41:1337/api/tags";
 const appendurl = "?populate=questions";
 const useFetch = (url) => {
     const [data, setData] = useState(null);
@@ -34,10 +34,15 @@ const useFetch = (url) => {
 
     return {loading, error, data};
 }
-export default function Tags(){
+export default function Tags(props){
     const {loading, error, data } = useFetch(url)
     const [changePost, setchangePost] = useState(-1)
+    const [menuShown, setMenuShown] = useState(false)
     const logo = require("./../assets/blue-circle-handbag-icon.png");
+    const menu = require("./../assets/menu.png");
+
+    const menuWhite = require("./../assets/menu-white.png");
+
     
     if (loading){
         return(
@@ -117,11 +122,40 @@ export default function Tags(){
             <View>
                 <Text style={{alignSelf: "center"}}>Copyright 2022 BKNO LIMITED</Text>
                 </View>
+                <TouchableOpacity style={{position: 'absolute', alignSelf: 'flex-end'}} onPress={() => setMenuShown(!menuShown)}>
+                <Image
+                    source={(menuShown)?menuWhite: menu}
+                    style={{
+                        width: 30,
+                        height: 50,
+                        margin: 20,
+                        zIndex: 10,
+                    }}
+                />
+                <Menu shown={menuShown} switchPage ={(page) =>props.switchPage(page) } ></Menu>
+                </TouchableOpacity>
             
         </View>
     )
 }
 
+const Menu = (props) => {
+    if (props.shown){
+        return <View style={{ position: 'absolute', backgroundColor: '#22a6e3', paddingTop:50 ,borderRadius:50}}>
+            <TouchableOpacity onPress={() => {props.switchPage(2)}}>
+            <Text style={{color: "#ffffff", alignSelf:'center', fontSize: 15, paddingVertical: 10, paddingTop:30,paddingHorizontal:2}}>T</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {props.switchPage(3)}}>
+            <Text style={{color: "#ffffff", alignSelf:'center', fontSize: 15, paddingVertical: 10, paddingHorizontal:30}}>Q</Text>
+            </TouchableOpacity>
+            <TouchableOpacity  onPress={() => {props.switchPage(4)}}>
+            <Text style={{color: "#ffffff", alignSelf:'center', fontSize: 15, paddingVertical: 10, paddingBottom:30,paddingHorizontal:30}}>A</Text>
+            </TouchableOpacity>
+        </View>
+    } else{
+        return <View></View>
+    }
+}
 const AllPreviewPost = (props) => {
     if (props.id == -1) return (<View></View>)
     const {loading, error, data } = useFetch(url + "/" + props.id + appendurl);

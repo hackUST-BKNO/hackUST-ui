@@ -2,10 +2,11 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
 import { Input } from '@rneui/base';
 
-export default function Register(){
-    const logo = require("/Users/oscar/hackUST-ui/assets/blue-circle-handbag-icon.png");
+export default function Register(props){
+    const logo = require("./../assets/blue-circle-handbag-icon.png");
     return(
         <View style={{}}>
+            
             <View style={{alignItems: 'center',}}>
                 <Image
                     source={logo}
@@ -26,6 +27,9 @@ export default function Register(){
             <View style={{marginHorizontal: 30}}>
                 <LoginButton text="Register"/>
             </View>
+            <TouchableOpacity style={{position: 'absolute'}} onPress={() => props.switchPage(0)}>
+            <Text style={{fontSize: 50, marginLeft: 20, color: '#22a6e3'}}>{"<"}</Text>
+            </TouchableOpacity>
         </View>
     )
 }

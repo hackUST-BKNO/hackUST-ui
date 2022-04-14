@@ -2,7 +2,11 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
 import { Input } from '@rneui/base';
 
-export default function Login(){
+global.AdminBypass = "Admin"
+global.AdminBypassPw = 12345678
+global.InputName = ''
+global.InputPW = ''
+export default function Login(props){
     const logo = require("./../assets/blue-circle-handbag-icon.png");
     return(
         <View style={{}}>
@@ -38,13 +42,13 @@ export default function Login(){
             </Text> */}
 
             <View style={{marginHorizontal: 30}}>
-                <Input placeholder='Name'/>
-                <Input placeholder="Password" secureTextEntry={true} />
+                <Input placeholder='Name' onChangeText={(text) => {InputName = text}}/>
+                <Input placeholder="Password" secureTextEntry={true} onChangeText={(text) => {InputPW = text}}/>
             </View>
-
+ 
             <View style={{marginHorizontal: 30}}>
-                <LoginButton text="Login"/>
-                <RegisterButton text="Don't have an account?"/>
+                <LoginButton text="Login" onPageChange={(page) => props.switchPage(page)}/>
+                <RegisterButton text="Don't have an account?" onPageChange={(page) => props.switchPage(page)}/>
             </View>
         </View>
     )
@@ -60,6 +64,13 @@ const LoginButton = (props) => (
             alignItems: 'center',
             //width: 100,
             margin: 5
+        }}
+        onPress={() => {
+            if (AdminBypass == InputName && AdminBypassPw == parseInt(InputPW)){
+                props.onPageChange(2)
+            } else{
+                alert("Wrong Username or Password")
+            }
         }}
     >
         <Text
@@ -85,6 +96,7 @@ const RegisterButton = (props) => (
             //width: 100,
             margin: 5
         }}
+        onPress = {() => props.onPageChange(1)}
     >
         <Text
             style={{

@@ -30,7 +30,11 @@ const useFetch = (url) => {
     return {loading, data, error};
 }
 
-export default function Ask(){
+export default function Ask(props){
+    const [menuShown, setMenuShown] = useState(false)
+    const menu = require("./../assets/menu.png");
+
+    const menuWhite = require("./../assets/menu-white.png");
     //const {loading, data , error} = useFetch(url);
     const [searchRes, setSearchRes] = useState(null);
     var data = ["How to raise my team's morale", "How to train new recruit?", "What is the new recruit camp about?"]
@@ -46,6 +50,7 @@ export default function Ask(){
         });
     }
     return(
+        <View>
         <ScrollView>
             <Card>
                 <Card.Title h3 style={{textAlign: 'left'}}>Ask your question.</Card.Title>
@@ -65,5 +70,36 @@ export default function Ask(){
                 }
             </Card>
         </ScrollView>
+        <TouchableOpacity style={{position: 'absolute', alignSelf: 'flex-end'}} onPress={() => setMenuShown(!menuShown)}>
+                <Image
+                    source={(menuShown)?menuWhite: menu}
+                    style={{
+                        width: 30,
+                        height: 50,
+                        margin: 20,
+                        zIndex: 10,
+                    }}
+                />
+                <Menu shown={menuShown} switchPage ={(page) =>props.switchPage(page) } ></Menu>
+                </TouchableOpacity>
+        </View>
     )
+}
+
+const Menu = (props) => {
+    if (props.shown){
+        return <View style={{ position: 'absolute', backgroundColor: '#22a6e3', paddingTop:50 ,borderRadius:50}}>
+            <TouchableOpacity onPress={() => {props.switchPage(2)}}>
+            <Text style={{color: "#ffffff", alignSelf:'center', fontSize: 15, paddingVertical: 10, paddingTop:30,paddingHorizontal:2}}>T</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {props.switchPage(3)}}>
+            <Text style={{color: "#ffffff", alignSelf:'center', fontSize: 15, paddingVertical: 10, paddingHorizontal:30}}>Q</Text>
+            </TouchableOpacity>
+            <TouchableOpacity  onPress={() => {props.switchPage(4)}}>
+            <Text style={{color: "#ffffff", alignSelf:'center', fontSize: 15, paddingVertical: 10, paddingBottom:30,paddingHorizontal:30}}>A</Text>
+            </TouchableOpacity>
+        </View>
+    } else{
+        return <View></View>
+    }
 }
