@@ -5,7 +5,7 @@ import { BLACK, GRAY } from 'reinput/src/services/constants';
 import { withTheme } from '@rneui/themed';
 
 
-const url = "http://192.168.86.41:1337/api/tags";
+const url = "http://nothing:1337/api/tags";
 const useFetch = (url) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
