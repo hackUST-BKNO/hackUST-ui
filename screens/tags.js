@@ -3,9 +3,10 @@ import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react
 import { Button, Input, lightColors } from '@rneui/base';
 import { BLACK, GRAY } from 'reinput/src/services/constants';
 import { withTheme } from '@rneui/themed';
+import { styles } from 'reinput/src/Input';
 
-
-const url = "http://nothing:1337/api/tags";
+const url = "http://none:1337/api/tags";
+const appendurl = "?populate=questions";
 const useFetch = (url) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
@@ -35,8 +36,9 @@ const useFetch = (url) => {
 }
 export default function Tags(){
     const {loading, error, data } = useFetch(url)
+    const [changePost, setchangePost] = useState(-1)
     const logo = require("./../assets/blue-circle-handbag-icon.png");
-    const upvote = require("./../assets/blue-upvote.png");
+    
     if (loading){
         return(
             <View>
@@ -85,9 +87,14 @@ export default function Tags(){
                 />
                 <Text style={{margin:10, marginTop: 15, fontSize: 40}}>Tags</Text>
             </View>
-            <ShowAllTag fetchedData = {data.data}/>
+            <ShowAllTag fetchedData = {data.data} tagSelected= {(id) => {
+                setchangePost(id);
+            }}/>
+            <View style={{margin: 3}}></View>
             <View>
-                <ScrollView>
+                
+                    <AllPreviewPost id={changePost} />
+                    {/*
                     <PreviewPost logo={upvote}/>
                     <View style={{borderBottomColor: "#090909", borderBottomWidth: StyleSheet.hairlineWidth, margin: 10}}></View>
                     <PreviewPost logo={upvote}/>
@@ -104,41 +111,54 @@ export default function Tags(){
                     <View style={{borderBottomColor: "#090909", borderBottomWidth: StyleSheet.hairlineWidth, margin: 10}}></View>
                     <PreviewPost logo={upvote}/>
                     <View style={{borderBottomColor: "#090909", borderBottomWidth: StyleSheet.hairlineWidth, margin: 10}}></View>
-                </ScrollView>
+        */}
+                
             </View>
+            <View>
+                <Text style={{alignSelf: "center"}}>Copyright 2022 BKNO LIMITED</Text>
+                </View>
+            
         </View>
     )
 }
 
-
+const AllPreviewPost = (props) => {
+    if (props.id == -1) return (<View></View>)
+    const {loading, error, data } = useFetch(url + "/" + props.id + appendurl);
+    if (!data) return(<View></View>)
+    return (
+        <ScrollView style={{height: 480}}>
+            {data.data.attributes.questions.data.map((post) => <View>
+        <PreviewPost title={post.attributes.questiontitle} body={post.attributes.question} upvote={post.attributes.upvote}/>
+        <View style={{borderBottomColor: "#090909", borderBottomWidth: StyleSheet.hairlineWidth, margin: 10}}></View>
+        </View>)}
+        </ScrollView>)
+}
 const PreviewPost = (props) => {
-    return <TouchableOpacity onPress={() =>{}}>
-    <View  style={{borderColor: "#AAAAAA", borderWidth: 1, margin: 5, padding: 6}}>
-        <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 3}}>Question</Text>
+    const upvoteIcon = require("./../assets/blue-upvote.png");
+    return <View  style={{borderColor: "#AAAAAA", borderWidth: 1, margin: 5, padding: 6}}>
+        <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 3}}>{props.title}</Text>
         <View style={{backgroundColor: "#E1f5ff", flexWrap: 'wrap', flexDirection: "row"}} >
             <ShowTag text="tags"/>
         </View>
         <View>
-            <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                Ut enim ad minim veniam...</Text>
+            <Text>{props.body.substring(0,200)}...</Text>
         </View>
         <View style={{borderBottomColor: "#090909", borderBottomWidth: StyleSheet.hairlineWidth, margin: 10}}></View>
         <View style={{flexDirection: "row"}}>
             <Image
-                    source={props.logo}
+                    source={upvoteIcon}
                     style={{
                         width: 15,
                         height: 10,
                         marginTop: 5
                     }}
                 />
-                <Text style={{marginLeft: 5}}>100</Text>
+                <Text style={{marginLeft: 5}}>{props.upvote}</Text>
                 <Text style={{marginLeft: 30}}>Replies: </Text>
                 <Text>20</Text>
         </View>
     </View>
-    </TouchableOpacity>
 }
 const ShowAllTag = (props) => { 
     const [showalltags, setshowalltags] = useState(true);
@@ -146,7 +166,9 @@ const ShowAllTag = (props) => {
         return(
             <View>
             <ScrollView horizontal={true} style={{flexDirection: "row",padding: 5, backgroundColor: "#E1E1E1"} }>
-                {props.fetchedData.map((tag) => <ShowTag text= {tag.attributes.name}/>)}
+                {props.fetchedData.map((tag) => <TouchableOpacity onPress={() =>{props.tagSelected(tag.id)}} key={tag.attributes.id} className="tags-cad">
+                    <ShowTag text= {tag.attributes.name}/>
+                    </TouchableOpacity>)}
                     </ScrollView>
                     <Button onPress={() => {setshowalltags(!showalltags)}} title={'V'}titleStyle={{fontSize:9}} buttonStyle={{marginTop:5,padding: 5,paddingTop:3, maxHeight:20, backgroundColor: "#22a6e3"}}/>
                 </View>
@@ -157,13 +179,15 @@ const ShowAllTag = (props) => {
         return ( 
             <View>
                 <View style={{padding: 5, backgroundColor: "#E1E1E1", flexWrap: 'wrap', flexDirection: "row"}} >
-                {props.fetchedData.map((tag) => <ShowTag text= {tag.attributes.name}/>)}
+                {props.fetchedData.map((tag) => <TouchableOpacity onPress={() =>{props.tagSelected(tag.id)}} key={tag.attributes.id} className="tags-cad">
+                    <ShowTag text= {tag.attributes.name}/>
+                    </TouchableOpacity>)}
                 </View>
                     <Button onPress={() => {setshowalltags(!showalltags)}} title={'^'} buttonStyle={{marginTop:5,padding: 0,paddingTop:1, maxHeight:20, backgroundColor: "#22a6e3"}}/>
             </View>)
 }}
 const ShowTag = (props) =>(
-    <TouchableOpacity onPress={() =>{}}>
+    
     <Text  style={{
         fontWeight: "bold",
         backgroundColor: GRAY, 
@@ -173,5 +197,4 @@ const ShowTag = (props) =>(
         marginHorizontal: 5, 
         marginVertical: 5
         }}>{props.text}</Text>
-        </TouchableOpacity>
 )
