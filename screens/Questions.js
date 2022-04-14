@@ -1,10 +1,11 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
 import { Card, Icon } from '@rneui/themed';
+import { Input } from '@rneui/base';
 
 export default function Questions(){
     return(
-        <View style={{alignItems: 'center'}}>
+        <ScrollView>
             <Card containerStyle={{margin:'auto'}}>
                 <View style={{flex: 0, flexDirection: 'row'}}>
                     <View style={{flexShrink: 1}}>
@@ -30,7 +31,11 @@ export default function Questions(){
                     </View>
                 </View>
             </Card>
-        </View>
+            <Card containerStyle={{width:'94%', marginBottom:10}}>
+                <Card.Title style={{textAlign: 'left'}}>Got your own answer?</Card.Title>
+                <Input placeholder='Type here.'/>
+            </Card>
+        </ScrollView>
     )
 }
 
@@ -38,24 +43,22 @@ const Votes = (props) => (
     <View>
         <TouchableOpacity
             style={{
-                //backgroundColor: "#85F4FF",
                 borderRadius: 10,
                 paddingVertical: 6,
                 alignItems: 'center',
             }}
         >
-            <Icon type='antdesign' name="caretup" color="grey" />
+            <Icon type='antdesign' name="caretup" color="#6AC3CC" />
         </TouchableOpacity>
         <Text h4 style={{textAlign:'center'}}> {props.votes} </Text>
         <TouchableOpacity
             style={{
-                //backgroundColor: "#85F4FF",
                 borderRadius: 10,
                 paddingVertical: 6,
                 alignItems: 'center',
             }}
         >
-            <Icon type='antdesign' name="caretdown" color="grey" />
+            <Icon type='antdesign' name="caretdown" color="#6AC3CC" />
         </TouchableOpacity>
     </View>
 )
